@@ -27,6 +27,19 @@ const branchDayByDate = {
   '2026-09-27': 9,
 }
 
+const activityShortLabels = {
+  ski: '滑雪',
+  horse: '騎馬',
+  jetboat: '快艇',
+  cook: '健行',
+  twizel: '觀星',
+  skyline: '纜車',
+  onsen: '溫泉',
+  steam: '蒸汽船',
+}
+
+const activityDisplayLabel = (entry) => `${activityShortLabels[entry.id] || entry.label}`.padEnd(4, ' ')
+
 function toDate(day, time) {
   const [year, month, date] = day.date.split('-').map(Number)
   const [hour, minute] = time.split(':').map(Number)
@@ -696,13 +709,13 @@ function PreparationTips() {
                         className={entry.id === activeActivity ? 'active' : ''}
                         onClick={() => setActiveActivity(entry.id)}
                       >
-                        <span>{entry.label}</span>
+                        <span>{activityDisplayLabel(entry)}</span>
                       </button>
                     ))}
                   </div>
                   <div className="prep-activity">
                     <div className="prep-activity-head">
-                      <h4>{activeActivityData.label}</h4>
+                      <h4>{activityShortLabels[activeActivityData.id] || activeActivityData.label}</h4>
                     </div>
                     {activeActivityData.body.map((line) => <p key={line}>{line}</p>)}
                     <div className="prep-note">
