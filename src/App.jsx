@@ -761,6 +761,7 @@ function SectionHeading({ index, overline, title, text }) {
 
 const navItems = [
   { id: 'home', label: '首頁', icon: Home },
+  { id: 'tracker', label: '追蹤', icon: Clock3 },
   { id: 'itinerary', label: '行程', icon: CalendarDays },
   { id: 'explore', label: '探索', icon: Compass },
   { id: 'preparation', label: '準備', icon: Luggage },
@@ -807,6 +808,7 @@ function App() {
               <span><Users size={17} />{tripMeta.people}</span>
               <span><Map size={17} />{tripMeta.nights}</span>
             </div>
+            <a className="hero-cta" href="#tracker"><Clock3 size={16} />即時追蹤 Live Tracker</a>
           </div>
           <div className="route-line" aria-label="旅程路線">
             <span>Queenstown</span><i /><span>Twizel</span><i /><span>Christchurch</span>
