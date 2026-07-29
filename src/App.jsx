@@ -648,7 +648,7 @@ function PreparationTips() {
       <div className="prep-shell">
         <div className="prep-main">
           <div className="prep-tabs" role="tablist" aria-label="行前準備分類">
-            {Object.entries(prepSections).filter(([id]) => id !== 'activities').map(([id, entry]) => {
+            {Object.entries(prepSections).map(([id, entry]) => {
               const EntryIcon = entry.icon
               return (
                 <button
@@ -685,73 +685,75 @@ function PreparationTips() {
               ))}
             </div>
           </article>
-        </div>
 
-        <article className="prep-card prep-activities">
-          <div className="prep-card-head">
-            <div>
-              <div className="eyebrow text-forest/45">ACTIVITIES GUIDE</div>
-              <h3>特殊活動詳細指南</h3>
-            </div>
-            <span className="prep-icon"><ActivityIcon size={24} /></span>
-          </div>
-
-          <div className="prep-tabs prep-tabs-compact" role="tablist" aria-label="活動子分頁">
-            {activities.map((entry) => (
-              <button
-                key={entry.id}
-                role="tab"
-                aria-selected={entry.id === activeActivity}
-                className={entry.id === activeActivity ? 'active' : ''}
-                onClick={() => setActiveActivity(entry.id)}
-              >
-                <span>{entry.label}</span>
-              </button>
-            ))}
-          </div>
-
-          <div className="prep-activity">
-            <div className="prep-activity-head">
-              <h4>{activeActivityData.label}</h4>
-              <p>每個活動採獨立子頁面閱讀，以下內容已完整保留並進一步擴充。</p>
-            </div>
-            <div className="prep-copy">
-              {activeActivityData.body.map((line) => <p key={line}>{line}</p>)}
-              <div className="prep-note">
-                <strong>補充提醒</strong>
-                <p>若遇強風、降雨、山區結冰或能見度驟降，請以現場安全規範與活動單位指示為先，活動當天也建議依體感與天氣微調裝備層次。</p>
+          {active === 'activities' && (
+            <article className="prep-card prep-activities-inline">
+              <div className="prep-card-head">
+                <div>
+                  <div className="eyebrow text-forest/45">ACTIVITIES GUIDE</div>
+                  <h3>特殊活動詳細指南</h3>
+                </div>
+                <span className="prep-icon"><ActivityIcon size={24} /></span>
               </div>
-            </div>
-          </div>
-        </article>
 
-        <article className="prep-card prep-checklist">
-          <div className="prep-card-head">
-            <div>
-              <div className="eyebrow text-forest/45">PACKING CHECKLIST</div>
-              <h3>互動式行李打包勾選清單</h3>
-            </div>
-            <span className="prep-icon"><Luggage size={24} /></span>
-          </div>
+              <div className="prep-tabs prep-tabs-compact" role="tablist" aria-label="活動子分頁">
+                {activities.map((entry) => (
+                  <button
+                    key={entry.id}
+                    role="tab"
+                    aria-selected={entry.id === activeActivity}
+                    className={entry.id === activeActivity ? 'active' : ''}
+                    onClick={() => setActiveActivity(entry.id)}
+                  >
+                    <span>{entry.label}</span>
+                  </button>
+                ))}
+              </div>
 
-          <div className="checklist-grid">
-            {packingChecklist.map((group, groupIndex) => (
-              <section key={group.title} className="checklist-group">
-                <h4>{group.title}</h4>
-                {group.items.map((item, itemIndex) => {
-                  const key = `${groupIndex}-${itemIndex}`
-                  const isChecked = Boolean(checked[key])
-                  return (
-                    <label key={item} className={`check-item ${isChecked ? 'checked' : ''}`}>
-                      <input type="checkbox" checked={isChecked} onChange={() => toggleItem(groupIndex, itemIndex)} />
-                      <span>{item}</span>
-                    </label>
-                  )
-                })}
-              </section>
-            ))}
-          </div>
-        </article>
+              <div className="prep-activity">
+                <div className="prep-activity-head">
+                  <h4>{activeActivityData.label}</h4>
+                  <p>每個活動採獨立子頁面閱讀，以下內容已完整保留並進一步擴充。</p>
+                </div>
+                <div className="prep-copy">
+                  {activeActivityData.body.map((line) => <p key={line}>{line}</p>)}
+                  <div className="prep-note">
+                    <strong>補充提醒</strong>
+                    <p>若遇強風、降雨、山區結冰或能見度驟降，請以現場安全規範與活動單位指示為先，活動當天也建議依體感與天氣微調裝備層次。</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          )}
+
+          <article className="prep-card prep-checklist">
+            <div className="prep-card-head">
+              <div>
+                <div className="eyebrow text-forest/45">PACKING CHECKLIST</div>
+                <h3>互動式行李打包勾選清單</h3>
+              </div>
+              <span className="prep-icon"><Luggage size={24} /></span>
+            </div>
+
+            <div className="checklist-grid">
+              {packingChecklist.map((group, groupIndex) => (
+                <section key={group.title} className="checklist-group">
+                  <h4>{group.title}</h4>
+                  {group.items.map((item, itemIndex) => {
+                    const key = `${groupIndex}-${itemIndex}`
+                    const isChecked = Boolean(checked[key])
+                    return (
+                      <label key={item} className={`check-item ${isChecked ? 'checked' : ''}`}>
+                        <input type="checkbox" checked={isChecked} onChange={() => toggleItem(groupIndex, itemIndex)} />
+                        <span>{item}</span>
+                      </label>
+                    )
+                  })}
+                </section>
+              ))}
+            </div>
+          </article>
+        </div>
       </div>
     </section>
   )
