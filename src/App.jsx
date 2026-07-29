@@ -165,7 +165,6 @@ function JourneyTracker() {
         <div className="branch-prompt">
           <div>
             <div className="eyebrow text-mint">TODAY NEEDS A BRANCH</div>
-            <p className="mt-2 text-sm text-white/75">今天是分組日，請先選擇你要追蹤的行程分支，這樣 Now / Up Next 才會準確。</p>
           </div>
           <div className="branch-choice-row">
             {status.branchDay.map((branch) => (
