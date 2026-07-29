@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
   ArrowRight, CalendarDays, Car, ChevronDown, ChevronRight, Clock3, Compass,
-  ExternalLink, Home, Info, Luggage, Map, MapPin, Navigation, Search, Sparkles, Users, X,
+  ExternalLink, Home, Info, Luggage, Map, MapPin, Menu, Navigation, Search, Sparkles, Users, X,
 } from 'lucide-react'
 import { highlights, itinerary, regions, tripMeta } from './data'
 
@@ -763,11 +763,11 @@ const navItems = [
   { id: 'itinerary', label: '行程', icon: CalendarDays },
   { id: 'explore', label: '探索', icon: Compass },
   { id: 'preparation', label: '準備', icon: Luggage },
-  { id: 'highlights', label: '亮點', icon: Sparkles },
 ]
 
 function NavigationShell() {
   const [active, setActive] = useState('home')
+  const [mobileOpen, setMobileOpen] = useState(false)
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
@@ -776,7 +776,10 @@ function NavigationShell() {
     navItems.forEach(({ id }) => { const el = document.getElementById(id); if (el) observer.observe(el) })
     return () => observer.disconnect()
   }, [])
-  const go = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  const go = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    setMobileOpen(false)
+  }
   return (
     <>
       <aside className="sidebar">
@@ -784,7 +787,18 @@ function NavigationShell() {
         <nav>{navItems.map(({ id, label, icon: Icon }) => <button className={active === id ? 'active' : ''} key={id} onClick={() => go(id)}><Icon size={19} /><span>{label}</span></button>)}</nav>
         <div className="sidebar-foot"><span>NZ</span><p>South Island<br />2026</p></div>
       </aside>
-      <nav className="mobile-nav">{navItems.map(({ id, label, icon: Icon }) => <button className={active === id ? 'active' : ''} key={id} onClick={() => go(id)}><Icon size={20} /><span>{label}</span></button>)}</nav>
+      <div className={`mobile-nav-shell ${mobileOpen ? 'open' : ''}`}>
+        <button
+          className="mobile-nav-toggle"
+          onClick={() => setMobileOpen((v) => !v)}
+          aria-expanded={mobileOpen}
+          aria-label={mobileOpen ? '收合導覽列' : '展開導覽列'}
+        >
+          {mobileOpen ? <ChevronDown size={18} /> : <Menu size={18} />}
+          <span>{mobileOpen ? '收合' : '導覽'}</span>
+        </button>
+        <nav className="mobile-nav">{navItems.map(({ id, label, icon: Icon }) => <button className={active === id ? 'active' : ''} key={id} onClick={() => go(id)}><Icon size={20} /><span>{label}</span></button>)}</nav>
+      </div>
     </>
   )
 }
@@ -812,12 +826,11 @@ function App() {
             <span>Queenstown</span><i /><span>Twizel</span><i /><span>Christchurch</span>
           </div>
         </section>
-        <div className="content-wrap">
+          <div className="content-wrap">
           <JourneyTracker />
           <Itinerary />
           <Explore />
           <PreparationTips />
-          <Highlights />
           <footer><span className="footer-mark">SN</span><p>南島慢旅 · Southern Notes</p><small>Made for the road, 2026.</small></footer>
         </div>
       </main>
