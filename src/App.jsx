@@ -1,0 +1,310 @@
+import { useEffect, useMemo, useState } from 'react'
+import {
+  ArrowRight, CalendarDays, Car, ChevronDown, ChevronRight, Clock3, Compass,
+  ExternalLink, Home, Info, Map, MapPin, Navigation, Search, Sparkles, Users, X,
+} from 'lucide-react'
+import { highlights, itinerary, regions, tripMeta } from './data'
+
+const pad = (n) => String(n).padStart(2, '0')
+const mapUrl = (place) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`
+
+function toDate(day, time) {
+  const [year, month, date] = day.date.split('-').map(Number)
+  const [hour, minute] = time.split(':').map(Number)
+  return new Date(year, month - 1, date, hour, minute)
+}
+
+const allEvents = itinerary.flatMap((day) =>
+  day.items.map((event) => ({ ...event, day: day.day, date: day.date, city: day.city, theme: day.theme, at: toDate(day, event.time) })),
+).sort((a, b) => a.at - b.at)
+
+function formatNow(date) {
+  return new Intl.DateTimeFormat('zh-TW', {
+    month: 'short', day: 'numeric', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false,
+  }).format(date)
+}
+
+function JourneyTracker() {
+  const [mode, setMode] = useState('live')
+  const [now, setNow] = useState(new Date())
+  const [customDate, setCustomDate] = useState('2026-09-23')
+  const [customTime, setCustomTime] = useState('14:15')
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(new Date()), 30000)
+    return () => window.clearInterval(timer)
+  }, [])
+
+  const queryTime = mode === 'live' ? now : new Date(`${customDate}T${customTime}:00`)
+  const status = useMemo(() => {
+    const first = allEvents[0]
+    const last = allEvents[allEvents.length - 1]
+    const sameDateEvents = allEvents.filter((event) => event.date === `${queryTime.getFullYear()}-${pad(queryTime.getMonth() + 1)}-${pad(queryTime.getDate())}`)
+    const startedToday = sameDateEvents.filter((event) => event.at <= queryTime)
+    const current = startedToday.at(-1) || null
+    const next = allEvents.find((event) => event.at > queryTime) || null
+    if (queryTime < first.at) return { state: 'before', current: null, next: first }
+    if (queryTime > new Date(2026, 8, 29, 23, 59)) return { state: 'after', current: null, next: null }
+    if (!current && sameDateEvents.length) return { state: 'waiting', current: null, next: sameDateEvents[0] }
+    if (!sameDateEvents.length) return { state: 'gap', current: null, next }
+    return { state: 'active', current, next }
+  }, [queryTime.getTime()])
+
+  return (
+    <section id="tracker" className="tracker-card overflow-hidden">
+      <div className="tracker-top">
+        <div>
+          <div className="eyebrow text-mint"><span className="live-dot" /> LIVE JOURNEY</div>
+          <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-white md:text-3xl">現在，旅程走到哪裡？</h2>
+          <p className="mt-2 text-sm text-white/60">{mode === 'live' ? `裝置時間 · ${formatNow(now)}` : `自訂時間 · ${formatNow(queryTime)}`}</p>
+        </div>
+        <div className="mode-switch" role="group" aria-label="時間模式">
+          <button className={mode === 'live' ? 'active' : ''} onClick={() => setMode('live')}>Live</button>
+          <button className={mode === 'custom' ? 'active' : ''} onClick={() => setMode('custom')}>自訂查詢</button>
+        </div>
+      </div>
+
+      {mode === 'custom' && (
+        <div className="custom-panel">
+          <label><span>旅程日期</span><input type="date" min="2026-09-19" max="2026-09-29" value={customDate} onChange={(e) => setCustomDate(e.target.value)} /></label>
+          <label><span>當地時間</span><input type="time" value={customTime} onChange={(e) => setCustomTime(e.target.value)} /></label>
+          <p><Sparkles size={15} /> 試著選擇 9/23 14:15，預覽快艇與蒸汽船的分組時刻。</p>
+        </div>
+      )}
+
+      <div className="tracker-grid">
+        <TrackerItem
+          label="正在進行 NOW"
+          event={status.current}
+          emptyTitle={status.state === 'after' ? '旅程已圓滿結束' : status.state === 'before' ? '旅程尚未開始' : status.state === 'gap' ? '今日沒有排定行程' : '今天還在慢慢醒來'}
+          emptyDetail={status.state === 'after' ? '帶著滿滿回憶回家了。' : status.state === 'before' ? '首站將於 9/19 15:30 開始。' : '下一站已經為你準備好了。'}
+          primary
+        />
+        <TrackerItem label="下一個行程 UP NEXT" event={status.next} emptyTitle="沒有下一個行程" emptyDetail="好好享受旅程的餘韻。" />
+      </div>
+    </section>
+  )
+}
+
+function TrackerItem({ label, event, emptyTitle, emptyDetail, primary = false }) {
+  return (
+    <div className={`tracker-item ${primary ? 'primary' : ''}`}>
+      <div className="eyebrow">{label}</div>
+      {event ? (
+        <>
+          <div className="mt-4 flex items-center gap-2 text-sm opacity-70">
+            <span>DAY {pad(event.day)}</span><span>·</span><span>{event.date.replaceAll('-', '.')}</span>
+          </div>
+          <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em]">{event.title}</h3>
+          {event.group && <span className="group-pill mt-3">{event.group}</span>}
+          <div className="mt-5 flex items-center justify-between gap-3 border-t border-current/10 pt-4">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 text-sm"><Clock3 size={15} /><strong>{event.time}</strong></div>
+              <div className="mt-2 flex items-start gap-2 text-sm opacity-75"><MapPin className="mt-0.5 shrink-0" size={15} /><span className="truncate">{event.place}</span></div>
+            </div>
+            <a className="nav-button" href={mapUrl(event.place)} target="_blank" rel="noreferrer" aria-label={`導航到 ${event.place}`}>
+              <Navigation size={17} /><span>導航</span>
+            </a>
+          </div>
+        </>
+      ) : (
+        <div className="py-7">
+          <h3 className="text-xl font-semibold">{emptyTitle}</h3>
+          <p className="mt-2 text-sm opacity-60">{emptyDetail}</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function Itinerary() {
+  const [activeDay, setActiveDay] = useState(0)
+  const day = itinerary[activeDay]
+
+  return (
+    <section id="itinerary" className="section-shell scroll-mt-24">
+      <SectionHeading index="01" overline="ITINERARY" title="十一天，不趕路的南島時間軸" text="點選天數，查看當日分組、交通、預算與重要提醒。" />
+      <div className="itinerary-layout">
+        <div className="day-rail" role="tablist" aria-label="選擇行程天數">
+          {itinerary.map((entry, index) => (
+            <button key={entry.day} role="tab" aria-selected={index === activeDay} className={index === activeDay ? 'active' : ''} onClick={() => setActiveDay(index)}>
+              <span className="day-number">{pad(entry.day)}</span>
+              <span className="day-copy"><strong>{entry.date.slice(5).replace('-', '/')}（{entry.weekday}）</strong><small>{entry.city}</small></span>
+              <ChevronRight size={17} />
+            </button>
+          ))}
+        </div>
+
+        <article className="day-detail" key={day.day}>
+          <header className="day-header">
+            <div>
+              <div className="eyebrow text-forest/50">DAY {pad(day.day)} · {day.date.replaceAll('-', '.')}（{day.weekday}）</div>
+              <h3>{day.theme}</h3>
+              <p><MapPin size={16} /> 今晚住在 {day.stay}</p>
+            </div>
+            <span className="day-symbol">{day.icon}</span>
+          </header>
+          <div className="timeline">
+            {day.items.map((event, index) => (
+              <div className="timeline-row" key={`${event.time}-${event.title}-${index}`}>
+                <time>{event.time}</time>
+                <span className="timeline-dot" />
+                <div className="event-card">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h4>{event.title}</h4>
+                    {event.group && <span className="group-pill">{event.group}</span>}
+                  </div>
+                  {event.detail && <p>{event.detail}</p>}
+                  <div className="event-place">
+                    <MapPin size={14} /><span>{event.place}</span>
+                    <a href={mapUrl(event.place)} target="_blank" rel="noreferrer">Google Maps <ExternalLink size={12} /></a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="day-facts">
+            <div><Car size={18} /><span><small>交通</small>{day.transport}</span></div>
+            <div><Info size={18} /><span><small>預算</small>{day.budget}</span></div>
+          </div>
+          <div className="note-box"><Sparkles size={18} /><p><strong>旅人提醒</strong>{day.note}</p></div>
+        </article>
+      </div>
+    </section>
+  )
+}
+
+function Explore() {
+  const [regionId, setRegionId] = useState('queenstown')
+  const [view, setView] = useState('restaurants')
+  const [category, setCategory] = useState('全部')
+  const [search, setSearch] = useState('')
+  const region = regions.find((entry) => entry.id === regionId)
+  const data = view === 'restaurants' ? region.restaurants : region.sights
+  const categories = ['全部', ...new Set(data.map((entry) => entry.type))]
+  const filtered = data.filter((entry) => (category === '全部' || entry.type === category) && `${entry.name}${entry.note}${entry.type}`.toLowerCase().includes(search.toLowerCase()))
+
+  useEffect(() => { setCategory('全部'); setSearch('') }, [regionId, view])
+
+  return (
+    <section id="explore" className="section-shell scroll-mt-24">
+      <SectionHeading index="02" overline="EXPLORE BY REGION" title="主行程之外，留給臨時起意的私藏清單" text="所有推薦均避開主行程既定地點；依料理類型、雨天或戶外情境快速篩選。" />
+      <div className="region-tabs">
+        {regions.map((entry) => <button key={entry.id} className={entry.id === regionId ? 'active' : ''} onClick={() => setRegionId(entry.id)}><span>{entry.name}</span><small>{entry.en}</small></button>)}
+      </div>
+      <div className="explore-toolbar">
+        <div>
+          <div className="eyebrow text-forest/45">{region.en.toUpperCase()} FIELD NOTES</div>
+          <h3>{region.tagline}</h3>
+        </div>
+        <div className="view-switch">
+          <button className={view === 'restaurants' ? 'active' : ''} onClick={() => setView('restaurants')}>必吃餐廳 <span>{region.restaurants.length}</span></button>
+          <button className={view === 'sights' ? 'active' : ''} onClick={() => setView('sights')}>備用景點 <span>{region.sights.length}</span></button>
+        </div>
+      </div>
+      <div className="filter-row">
+        <div className="category-scroll">
+          {categories.map((type) => <button key={type} className={type === category ? 'active' : ''} onClick={() => setCategory(type)}>{type}</button>)}
+        </div>
+        <label className="search-box"><Search size={17} /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="搜尋名稱或特色" /><span className="sr-only">搜尋推薦</span></label>
+      </div>
+      <div className="recommendation-grid">
+        {filtered.map((entry, index) => (
+          <article className="recommendation-card" key={entry.name}>
+            <div className="card-number">{pad(index + 1)}</div>
+            <span className="type-chip">{entry.type}</span>
+            <h4>{entry.name}</h4>
+            <p>{entry.note}</p>
+            <a href={mapUrl(entry.name)} target="_blank" rel="noreferrer"><Navigation size={15} /> 在地圖開啟</a>
+          </article>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function Highlights() {
+  return (
+    <section id="highlights" className="section-shell scroll-mt-24">
+      <SectionHeading index="03" overline="TRIP DNA" title="這趟旅程的五種質地" text="進可攻，退可守。不是只去過南島，而是在那裡生活了十一天。" />
+      <div className="highlight-grid">
+        {highlights.map(([number, title, text]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>)}
+      </div>
+    </section>
+  )
+}
+
+function SectionHeading({ index, overline, title, text }) {
+  return (
+    <div className="section-heading">
+      <div className="section-index">{index}</div>
+      <div><div className="eyebrow text-forest/45">{overline}</div><h2>{title}</h2><p>{text}</p></div>
+    </div>
+  )
+}
+
+const navItems = [
+  { id: 'home', label: '首頁', icon: Home },
+  { id: 'itinerary', label: '行程', icon: CalendarDays },
+  { id: 'explore', label: '探索', icon: Compass },
+  { id: 'highlights', label: '亮點', icon: Sparkles },
+]
+
+function NavigationShell() {
+  const [active, setActive] = useState('home')
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+      if (visible) setActive(visible.target.id)
+    }, { rootMargin: '-20% 0px -65%', threshold: [0, 0.2, 0.6] })
+    navItems.forEach(({ id }) => { const el = document.getElementById(id); if (el) observer.observe(el) })
+    return () => observer.disconnect()
+  }, [])
+  const go = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  return (
+    <>
+      <aside className="sidebar">
+        <button className="brand" onClick={() => go('home')} aria-label="回到首頁"><span>SN</span><div>Southern<small>Notes</small></div></button>
+        <nav>{navItems.map(({ id, label, icon: Icon }) => <button className={active === id ? 'active' : ''} key={id} onClick={() => go(id)}><Icon size={19} /><span>{label}</span></button>)}</nav>
+        <div className="sidebar-foot"><span>NZ</span><p>South Island<br />2026</p></div>
+      </aside>
+      <nav className="mobile-nav">{navItems.map(({ id, label, icon: Icon }) => <button className={active === id ? 'active' : ''} key={id} onClick={() => go(id)}><Icon size={20} /><span>{label}</span></button>)}</nav>
+    </>
+  )
+}
+
+function App() {
+  return (
+    <div>
+      <NavigationShell />
+      <main className="page">
+        <section id="home" className="hero">
+          <div className="hero-orb orb-one" /><div className="hero-orb orb-two" />
+          <header className="mobile-header"><span className="mobile-logo">SN</span><span>南島慢旅</span><small>2026</small></header>
+          <div className="hero-copy">
+            <div className="eyebrow text-mint">AOTEAROA · SOUTH ISLAND</div>
+            <h1>把南島的壯闊，<br /><em>走成自己的步調。</em></h1>
+            <p>一份為 5 位旅人準備的慢旅行手冊。春雪、星空、湖泊與好好吃飯的十一天。</p>
+            <div className="hero-meta">
+              <span><CalendarDays size={17} />{tripMeta.dates}</span>
+              <span><Users size={17} />{tripMeta.people}</span>
+              <span><Map size={17} />{tripMeta.nights}</span>
+            </div>
+          </div>
+          <div className="route-line" aria-label="旅程路線">
+            <span>Queenstown</span><i /><span>Twizel</span><i /><span>Christchurch</span>
+          </div>
+        </section>
+        <div className="content-wrap">
+          <JourneyTracker />
+          <Itinerary />
+          <Explore />
+          <Highlights />
+          <footer><span className="footer-mark">SN</span><p>南島慢旅 · Southern Notes</p><small>Made for the road, 2026.</small></footer>
+        </div>
+      </main>
+    </div>
+  )
+}
+
+export default App
