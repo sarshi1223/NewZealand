@@ -200,6 +200,21 @@ footer small { font-size: .65rem; }
   .search-box { flex: 0 0 220px; }
 }
 
+@media (max-width: 767px) {
+  .hero { min-height: 510px; padding: 1rem 1rem 2.75rem; }
+  .mobile-header { gap: .55rem; font-size: .72rem; }
+  .mobile-logo { width: 32px; height: 32px; }
+  .hero-copy { margin-top: 3.5rem; }
+  .hero-copy h1 { font-size: clamp(2.1rem, 9.4vw, 3.6rem); line-height: 1.02; }
+  .hero-copy > p { margin-top: 1rem; font-size: .86rem; line-height: 1.6; }
+  .hero-meta { gap: .55rem .9rem; margin-top: 1.25rem; }
+  .hero-meta span { font-size: .7rem; }
+  .route-line { right: 1rem; left: 1rem; bottom: 1rem; font-size: .56rem; }
+  .tracker-card { margin: -1.35rem .75rem 0; }
+  .tracker-top { padding: 1.1rem 1.1rem 1rem; }
+  .tracker-item { padding: 1.1rem; }
+}
+
 @media (min-width: 768px) {
   .hero { min-height: 690px; padding-right: 3.5rem; padding-left: 3.5rem; }
   .hero-copy { margin-top: 8rem; }
