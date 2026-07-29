@@ -7,6 +7,25 @@ import { highlights, itinerary, regions, tripMeta } from './data'
 
 const pad = (n) => String(n).padStart(2, '0')
 const mapUrl = (place) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`
+const branchLabels = {
+  ski: '🎿 滑雪行程',
+  sightseeing: '🚶 觀光行程',
+  jetboat: '🚤 快艇行程',
+  leisure: '☕ 休閒行程',
+  food: '🍽️ 美食行程',
+  british: '🛶 英倫行程',
+}
+const branchPairs = {
+  3: ['ski', 'sightseeing'],
+  5: ['jetboat', 'leisure'],
+  9: ['food', 'british'],
+}
+
+const branchDayByDate = {
+  '2026-09-21': 3,
+  '2026-09-23': 5,
+  '2026-09-27': 9,
+}
 
 function toDate(day, time) {
   const [year, month, date] = day.date.split('-').map(Number)
@@ -15,8 +34,25 @@ function toDate(day, time) {
 }
 
 const allEvents = itinerary.flatMap((day) =>
-  day.items.map((event) => ({ ...event, day: day.day, date: day.date, city: day.city, theme: day.theme, at: toDate(day, event.time) })),
+  day.items.map((event) => ({
+    ...event,
+    day: day.day,
+    date: day.date,
+    city: day.city,
+    theme: day.theme,
+    at: toDate(day, event.time),
+  })),
 ).sort((a, b) => a.at - b.at)
+
+const branchStorageKey = 'southern-notes-branch-selections'
+
+function getBranchDay(day) {
+  return branchPairs[day] || null
+}
+
+function getBranchEvents(events, branch) {
+  return events.filter((event) => event.branch === 'all' || event.branch === branch)
+}
 
 function formatNow(date) {
   return new Intl.DateTimeFormat('zh-TW', {
@@ -29,26 +65,71 @@ function JourneyTracker() {
   const [now, setNow] = useState(new Date())
   const [customDate, setCustomDate] = useState('2026-09-23')
   const [customTime, setCustomTime] = useState('14:15')
+  const [branchSelections, setBranchSelections] = useState({})
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 30000)
     return () => window.clearInterval(timer)
   }, [])
 
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(branchStorageKey)
+      if (raw) setBranchSelections(JSON.parse(raw))
+    } catch {
+      /* noop */
+    }
+  }, [])
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(branchStorageKey, JSON.stringify(branchSelections))
+    } catch {
+      /* noop */
+    }
+  }, [branchSelections])
+
   const queryTime = mode === 'live' ? now : new Date(`${customDate}T${customTime}:00`)
   const status = useMemo(() => {
-    const first = allEvents[0]
-    const last = allEvents[allEvents.length - 1]
-    const sameDateEvents = allEvents.filter((event) => event.date === `${queryTime.getFullYear()}-${pad(queryTime.getMonth() + 1)}-${pad(queryTime.getDate())}`)
+    const currentDay = itinerary.find((day) => day.date === `${queryTime.getFullYear()}-${pad(queryTime.getMonth() + 1)}-${pad(queryTime.getDate())}`)
+    const branchDay = currentDay ? getBranchDay(currentDay.day) : null
+    const selectedBranch = branchDay ? branchSelections[currentDay.date] : null
+
+    if (branchDay && mode === 'live' && !selectedBranch) {
+      return {
+        state: 'branch-needed',
+        current: null,
+        next: null,
+        branchDay,
+        date: currentDay.date,
+        branchLabels: branchDay.map((branch) => branchLabels[branch]),
+      }
+    }
+
+    const schedule = branchDay && selectedBranch
+      ? allEvents.filter((event) => {
+        if (event.date !== currentDay.date) return true
+        return event.branch === 'all' || event.branch === selectedBranch
+      })
+      : allEvents
+
+    const first = schedule[0]
+    const last = schedule[schedule.length - 1]
+    const sameDateEvents = schedule.filter((event) => event.date === `${queryTime.getFullYear()}-${pad(queryTime.getMonth() + 1)}-${pad(queryTime.getDate())}`)
     const startedToday = sameDateEvents.filter((event) => event.at <= queryTime)
     const current = startedToday.at(-1) || null
-    const next = allEvents.find((event) => event.at > queryTime) || null
+    const next = schedule.find((event) => event.at > queryTime) || null
+
     if (queryTime < first.at) return { state: 'before', current: null, next: first }
-    if (queryTime > new Date(2026, 8, 29, 23, 59)) return { state: 'after', current: null, next: null }
+    if (queryTime > last.at) return { state: 'after', current: null, next: null }
     if (!current && sameDateEvents.length) return { state: 'waiting', current: null, next: sameDateEvents[0] }
     if (!sameDateEvents.length) return { state: 'gap', current: null, next }
-    return { state: 'active', current, next }
-  }, [queryTime.getTime()])
+    return { state: 'active', current, next, branchDay, selectedBranch, currentDay }
+  }, [queryTime.getTime(), branchSelections, mode])
+
+  const setBranchForDate = (date, branch) => {
+    setBranchSelections((prev) => ({ ...prev, [date]: branch }))
+  }
 
   return (
     <section id="tracker" className="tracker-card overflow-hidden">
@@ -72,15 +153,31 @@ function JourneyTracker() {
         </div>
       )}
 
+      {status.state === 'branch-needed' && (
+        <div className="branch-prompt">
+          <div>
+            <div className="eyebrow text-mint">TODAY NEEDS A BRANCH</div>
+            <p className="mt-2 text-sm text-white/75">今天是分組日，請先選擇你要追蹤的行程分支，這樣 Now / Up Next 才會準確。</p>
+          </div>
+          <div className="branch-choice-row">
+            {status.branchDay.map((branch) => (
+              <button key={branch} className="branch-choice" onClick={() => setBranchForDate(status.date, branch)}>
+                {branchLabels[branch]}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="tracker-grid">
         <TrackerItem
           label="正在進行 NOW"
           event={status.current}
           emptyTitle={status.state === 'after' ? '旅程已圓滿結束' : status.state === 'before' ? '旅程尚未開始' : status.state === 'gap' ? '今日沒有排定行程' : '今天還在慢慢醒來'}
-          emptyDetail={status.state === 'after' ? '帶著滿滿回憶回家了。' : status.state === 'before' ? '首站將於 9/19 15:30 開始。' : '下一站已經為你準備好了。'}
+          emptyDetail={status.state === 'after' ? '帶著滿滿回憶回家了。' : status.state === 'before' ? '首站將於 9/19 15:30 開始。' : status.state === 'branch-needed' ? '請先選擇今天的分支。' : '下一站已經為你準備好了。'}
           primary
         />
-        <TrackerItem label="下一個行程 UP NEXT" event={status.next} emptyTitle="沒有下一個行程" emptyDetail="好好享受旅程的餘韻。" />
+        <TrackerItem label="下一個行程 UP NEXT" event={status.next} emptyTitle={status.state === 'branch-needed' ? '尚未選擇分支' : '沒有下一個行程'} emptyDetail={status.state === 'branch-needed' ? '選完分支後就會顯示精準的下一站。' : '好好享受旅程的餘韻。'} />
       </div>
     </section>
   )
@@ -96,7 +193,7 @@ function TrackerItem({ label, event, emptyTitle, emptyDetail, primary = false })
             <span>DAY {pad(event.day)}</span><span>·</span><span>{event.date.replaceAll('-', '.')}</span>
           </div>
           <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em]">{event.title}</h3>
-          {event.group && <span className="group-pill mt-3">{event.group}</span>}
+          {event.branch && event.branch !== 'all' && <span className="group-pill mt-3">{branchLabels[event.branch]}</span>}
           <div className="mt-5 flex items-center justify-between gap-3 border-t border-current/10 pt-4">
             <div className="min-w-0">
               <div className="flex items-center gap-2 text-sm"><Clock3 size={15} /><strong>{event.time}</strong></div>
@@ -119,7 +216,14 @@ function TrackerItem({ label, event, emptyTitle, emptyDetail, primary = false })
 
 function Itinerary() {
   const [activeDay, setActiveDay] = useState(0)
+  const [dayBranches, setDayBranches] = useState({})
   const day = itinerary[activeDay]
+  const branchDay = getBranchDay(day.day)
+  const selectedBranch = branchDay ? dayBranches[day.day] || branchDay[0] : null
+  const sharedItems = day.items.filter((event) => event.branch === 'all')
+  const branchOnlyItems = branchDay
+    ? day.items.filter((event) => event.branch === selectedBranch)
+    : []
 
   return (
     <section id="itinerary" className="section-shell scroll-mt-24">
@@ -144,24 +248,38 @@ function Itinerary() {
             </div>
             <span className="day-symbol">{day.icon}</span>
           </header>
-          <div className="timeline">
-            {day.items.map((event, index) => (
-              <div className="timeline-row" key={`${event.time}-${event.title}-${index}`}>
-                <time>{event.time}</time>
-                <span className="timeline-dot" />
-                <div className="event-card">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h4>{event.title}</h4>
-                    {event.group && <span className="group-pill">{event.group}</span>}
-                  </div>
-                  {event.detail && <p>{event.detail}</p>}
-                  <div className="event-place">
-                    <MapPin size={14} /><span>{event.place}</span>
-                    <a href={mapUrl(event.place)} target="_blank" rel="noreferrer">Google Maps <ExternalLink size={12} /></a>
-                  </div>
+          {branchDay && (
+            <div className="branch-toggle-shell">
+              {branchDay.map((branch) => (
+                <button
+                  key={branch}
+                  className={selectedBranch === branch ? 'active' : ''}
+                  onClick={() => setDayBranches((prev) => ({ ...prev, [day.day]: branch }))}
+                >
+                  {branchLabels[branch]}
+                </button>
+              ))}
+            </div>
+          )}
+          <div className={`timeline ${branchDay ? 'branch-day' : ''}`}>
+            {branchDay ? (
+              <>
+                <div className="timeline-branch-panel">
+                  <div className="eyebrow text-forest/45">共同行程</div>
+                  {sharedItems.map((event, index) => (
+                    <TimelineEvent key={`${event.time}-${event.title}-${index}`} event={event} />
+                  ))}
                 </div>
-              </div>
-            ))}
+                <div className="timeline-branch-panel active">
+                  <div className="eyebrow text-forest/45">{branchLabels[selectedBranch]}</div>
+                  {branchOnlyItems.map((event, index) => (
+                    <TimelineEvent key={`${event.time}-${event.title}-${index}`} event={event} />
+                  ))}
+                </div>
+              </>
+            ) : (
+              day.items.map((event, index) => <TimelineEvent key={`${event.time}-${event.title}-${index}`} event={event} />)
+            )}
           </div>
           <div className="day-facts">
             <div><Car size={18} /><span><small>交通</small>{day.transport}</span></div>
@@ -171,6 +289,26 @@ function Itinerary() {
         </article>
       </div>
     </section>
+  )
+}
+
+function TimelineEvent({ event }) {
+  return (
+    <div className="timeline-row">
+      <time>{event.time}</time>
+      <span className="timeline-dot" />
+      <div className="event-card">
+        <div className="flex flex-wrap items-center gap-2">
+          <h4>{event.title}</h4>
+          {event.branch && event.branch !== 'all' && <span className="group-pill">{branchLabels[event.branch]}</span>}
+        </div>
+        {event.detail && <p>{event.detail}</p>}
+        <div className="event-place">
+          <MapPin size={14} /><span>{event.place}</span>
+          <a href={mapUrl(event.place)} target="_blank" rel="noreferrer">Google Maps <ExternalLink size={12} /></a>
+        </div>
+      </div>
+    </div>
   )
 }
 

@@ -4,7 +4,7 @@ export const tripMeta = {
   nights: '11 天 10 夜',
 }
 
-const item = (time, title, place, detail = '', group = '') => ({ time, title, place, detail, group })
+const item = (time, title, place, detail = '', branch = 'all') => ({ time, title, place, detail, branch })
 
 export const itinerary = [
   {
@@ -29,7 +29,7 @@ export const itinerary = [
       item('15:30', '租車取車', 'Go Rentals Queenstown Airport'),
       item('16:00', '超市採購', "PAK'nSAVE Queenstown", '早餐食材、肋眼牛排與紅白酒'),
       item('17:00', '飯店 Check-in', 'Quest Queenstown Apartments'),
-      item('17:30', '雪具租借／湖畔散步', 'Snow Centre Queenstown', '2 人租雪具；3 人湖畔散步', '分組'),
+      item('17:30', '雪具租借／湖畔散步', 'Snow Centre Queenstown', '2 人租雪具；3 人湖畔散步'),
       item('19:30', '自炊晚餐', 'Quest Queenstown Apartments', '香煎紐西蘭肋眼牛排佐在地紅酒'),
     ],
   },
@@ -40,14 +40,14 @@ export const itinerary = [
     note: '熱門居酒屋建議提前訂位；雪地紫外線強，請配戴雪鏡並補擦防曬。',
     items: [
       item('08:30', '自製早餐', 'Quest Queenstown Apartments'),
-      item('09:00', '私人滑雪教練課', 'The Remarkables Ski Area', '09:00–12:00 強化技巧', '滑雪組 · 2 人'),
-      item('10:30', '天際纜車與 Luge', 'Skyline Queenstown', '登鮑伯峰俯瞰湖景', '觀光組 · 3 人'),
-      item('12:00', '雪場午餐', 'The Remarkables Ski Area', '簡餐約 $25 NZD', '滑雪組 · 2 人'),
-      item('13:00', '自由滑雪練習', 'The Remarkables Ski Area', '13:00–16:00', '滑雪組 · 2 人'),
-      item('13:00', '景觀午餐', 'Stratosfare Restaurant & Bar', '自助餐或市區簡餐', '觀光組 · 3 人'),
-      item('15:00', '皇后鎮花園漫步', 'Queenstown Gardens', '半島花園與湖光山色', '觀光組 · 3 人'),
-      item('16:30', '市區逛街', 'Queenstown Mall', '紀念品與咖啡', '觀光組 · 3 人'),
-      item('17:30', '歸還雪具', 'Snow Centre Queenstown', '', '滑雪組 · 2 人'),
+      item('09:00', '私人滑雪教練課', 'The Remarkables Ski Area', '09:00–12:00 強化技巧', 'ski'),
+      item('10:30', '天際纜車與 Luge', 'Skyline Queenstown', '登鮑伯峰俯瞰湖景', 'sightseeing'),
+      item('12:00', '雪場午餐', 'The Remarkables Ski Area', '簡餐約 $25 NZD', 'ski'),
+      item('13:00', '自由滑雪練習', 'The Remarkables Ski Area', '13:00–16:00', 'ski'),
+      item('13:00', '景觀午餐', 'Stratosfare Restaurant & Bar', '自助餐或市區簡餐', 'sightseeing'),
+      item('15:00', '皇后鎮花園漫步', 'Queenstown Gardens', '半島花園與湖光山色', 'sightseeing'),
+      item('16:30', '市區逛街', 'Queenstown Mall', '紀念品與咖啡', 'sightseeing'),
+      item('17:30', '歸還雪具', 'Snow Centre Queenstown', '', 'ski'),
       item('19:00', '日式鐵板燒晚餐', 'Tanoshi Queenstown', '推薦清酒，約 $100 NZD／人'),
     ],
   },
@@ -76,9 +76,9 @@ export const itinerary = [
       item('10:30', '出發前往秘境', 'Moke Lake'),
       item('11:00', '莫克湖與鮑勃灣', "Moke Lake", "高山湖泊倒影與 Bob's Cove 綠松石湖水"),
       item('12:30', '峽谷精釀午餐', 'Canyon Brewing'),
-      item('14:00', '快艇報到', 'Shotover Jet', '', '快艇組 · 3 人'),
-      item('14:30', 'Shotover Jet', 'Shotover Jet', '14:30–15:30，360° 峽谷甩尾', '快艇組 · 3 人'),
-      item('14:30', '百年蒸汽船巡湖', 'TSS Earnslaw', '約 1.5 小時', '休閒組 · 2 人'),
+      item('14:00', '快艇報到', 'Shotover Jet', '', 'jetboat'),
+      item('14:30', 'Shotover Jet', 'Shotover Jet', '14:30–15:30，360° 峽谷甩尾', 'jetboat'),
+      item('14:30', '百年蒸汽船巡湖', 'TSS Earnslaw', '約 1.5 小時', 'leisure'),
       item('17:00', '市區會合', 'Queenstown Bay'),
       item('18:30', '湖景牛排晚餐', 'Botswana Butchery Queenstown'),
     ],
@@ -138,9 +138,9 @@ export const itinerary = [
     note: 'Twenty Seven Steps 極熱門，建議立刻預訂 19:30 時段。',
     items: [
       item('09:30', '睡到自然醒、早餐', 'Sudima Christchurch City'),
-      item('11:00', '基督城十道美食導覽', 'Christchurch Central City', '11:00–14:00', '美食組 · 3 人'),
-      item('11:30', '河畔市集早午餐', 'Riverside Market', '', '英倫組 · 2 人'),
-      item('13:00', '基督城植物園', 'Christchurch Botanic Gardens', '', '英倫組 · 2 人'),
+      item('11:00', '基督城十道美食導覽', 'Christchurch Central City', '11:00–14:00', 'food'),
+      item('11:30', '河畔市集早午餐', 'Riverside Market', '', 'british'),
+      item('13:00', '基督城植物園', 'Christchurch Botanic Gardens', '', 'british'),
       item('14:30', '兩組會合', 'Christchurch Central City'),
       item('15:00', '復古電車城市巡遊', 'Christchurch Tram', '隨上隨下'),
       item('19:30', '新攝政街晚宴', 'Twenty Seven Steps'),
