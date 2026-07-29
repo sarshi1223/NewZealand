@@ -683,48 +683,40 @@ function PreparationTips() {
                   </div>
                 </details>
               ))}
+              {active === 'activities' && (
+                <>
+                  <div className="prep-activities-head">
+                    <div className="eyebrow text-forest/45">ACTIVITIES GUIDE</div>
+                    <h4>特殊活動詳細指南</h4>
+                    <p>每個活動採獨立子頁面閱讀，以下內容已完整保留並進一步擴充。</p>
+                  </div>
+                  <div className="prep-tabs prep-tabs-compact" role="tablist" aria-label="活動子分頁">
+                    {activities.map((entry) => (
+                      <button
+                        key={entry.id}
+                        role="tab"
+                        aria-selected={entry.id === activeActivity}
+                        className={entry.id === activeActivity ? 'active' : ''}
+                        onClick={() => setActiveActivity(entry.id)}
+                      >
+                        <span>{entry.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="prep-activity">
+                    <div className="prep-activity-head">
+                      <h4>{activeActivityData.label}</h4>
+                    </div>
+                    {activeActivityData.body.map((line) => <p key={line}>{line}</p>)}
+                    <div className="prep-note">
+                      <strong>補充提醒</strong>
+                      <p>若遇強風、降雨、山區結冰或能見度驟降，請以現場安全規範與活動單位指示為先，活動當天也建議依體感與天氣微調裝備層次。</p>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </article>
-
-          {active === 'activities' && (
-            <article className="prep-card prep-activities-inline">
-              <div className="prep-card-head">
-                <div>
-                  <div className="eyebrow text-forest/45">ACTIVITIES GUIDE</div>
-                  <h3>特殊活動詳細指南</h3>
-                </div>
-                <span className="prep-icon"><ActivityIcon size={24} /></span>
-              </div>
-
-              <div className="prep-tabs prep-tabs-compact" role="tablist" aria-label="活動子分頁">
-                {activities.map((entry) => (
-                  <button
-                    key={entry.id}
-                    role="tab"
-                    aria-selected={entry.id === activeActivity}
-                    className={entry.id === activeActivity ? 'active' : ''}
-                    onClick={() => setActiveActivity(entry.id)}
-                  >
-                    <span>{entry.label}</span>
-                  </button>
-                ))}
-              </div>
-
-              <div className="prep-activity">
-                <div className="prep-activity-head">
-                  <h4>{activeActivityData.label}</h4>
-                  <p>每個活動採獨立子頁面閱讀，以下內容已完整保留並進一步擴充。</p>
-                </div>
-                <div className="prep-copy">
-                  {activeActivityData.body.map((line) => <p key={line}>{line}</p>)}
-                  <div className="prep-note">
-                    <strong>補充提醒</strong>
-                    <p>若遇強風、降雨、山區結冰或能見度驟降，請以現場安全規範與活動單位指示為先，活動當天也建議依體感與天氣微調裝備層次。</p>
-                  </div>
-                </div>
-              </div>
-            </article>
-          )}
 
           <article className="prep-card prep-checklist">
             <div className="prep-card-head">
