@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
   ArrowRight, CalendarDays, Car, ChevronDown, ChevronRight, Clock3, Compass,
-  ExternalLink, Home, Info, Map, MapPin, Navigation, Search, Sparkles, Users, X,
+  ExternalLink, Home, Info, Luggage, Map, MapPin, Navigation, Search, Sparkles, Users, X,
 } from 'lucide-react'
 import { highlights, itinerary, regions, tripMeta } from './data'
 
@@ -248,8 +248,8 @@ function Itinerary() {
         <div className="day-rail" role="tablist" aria-label="選擇行程天數">
           {itinerary.map((entry, index) => (
             <button key={entry.day} role="tab" aria-selected={index === activeDay} className={index === activeDay ? 'active' : ''} onClick={() => setActiveDay(index)}>
-              <span className="day-number">{pad(entry.day)}</span>
-              <span className="day-copy"><strong>{entry.date.slice(5).replace('-', '/')}（{entry.weekday}）</strong><small>{entry.city}</small></span>
+              <span className="day-number">Day {pad(entry.day)}</span>
+              <span className="day-copy"><strong>{entry.date.slice(5).replace('-', '/')} ({entry.weekday})</strong><small>{entry.city}</small></span>
               <ChevronRight size={17} />
             </button>
           ))}
@@ -373,6 +373,103 @@ function Highlights() {
   )
 }
 
+const prepCategories = [
+  {
+    id: 'pack',
+    title: '出發前 & 打包建議',
+    icon: Luggage,
+    items: [
+      '九月底是初春，請採洋蔥式穿搭：薄上衣、保暖中層、防風外套分層準備，方便隨時增減。',
+      '南島紫外線依然很強，請帶高係數防曬乳、太陽眼鏡與帽子，尤其在雪地與水邊反光更明顯。',
+      '紐西蘭入境檢疫非常嚴格，登山鞋、運動鞋底的泥土務必刷洗乾淨，絕對不要攜帶肉類或生鮮食材。',
+    ],
+  },
+  {
+    id: 'drive',
+    title: '自駕須知',
+    icon: Car,
+    items: [
+      '紐西蘭靠左行駛，轉彎、變換車道與出車位前都要先提醒自己方向感。',
+      '圓環規則通常是禮讓右方來車，進入前先確認內圈車流再匯入。',
+      '遇到單線橋樑請留意讓行標誌與對向來車，先確認誰有優先通行權。',
+      '春季部分高山路段仍可能結冰或降雪，若行程會翻越山區，建議備妥雪鏈。',
+    ],
+  },
+  {
+    id: 'local',
+    title: '當地旅遊須知',
+    icon: Compass,
+    items: [
+      '水龍頭冷水通常可直接飲用，出門可帶水瓶節省購買瓶裝水。',
+      '紐西蘭沒有普遍的小費文化，多數餐廳沒有強制加收服務費的習慣。',
+      '湖畔與草地要注意沙蠅 Sandflies，建議隨身準備防蚊液，特別是傍晚時段。',
+    ],
+  },
+  {
+    id: 'activities',
+    title: '特殊活動須知',
+    icon: Sparkles,
+    items: [
+      '滑雪（9/21）：必備防水手套、雪鏡、脖圍，臉部也要做好防曬。',
+      '騎馬（9/22）：務必穿長褲與包鞋，避免穿著會隨風飄揚的寬鬆衣物。',
+      '峽谷噴射快艇（9/23）：峽谷風勢強又冷，請帶防風外套與能緊戴的毛帽，建議配戴墨鏡擋風。',
+      '庫克山健行（9/25）：Hooker Valley Track 雖平緩，仍請採洋蔥式穿搭，帶足飲水、行動糧，並穿舒適運動鞋或輕裝登山鞋。',
+      '觀星與追極光（Twizel）：夜晚接近零度，請穿最保暖的羽絨衣、毛帽與手套；可下載 Aurora App 監測 KP 值，拍照建議帶腳架並使用紅光手電筒。',
+    ],
+  },
+]
+
+function PreparationTips() {
+  const [active, setActive] = useState('pack')
+  const activeCategory = prepCategories.find((entry) => entry.id === active) || prepCategories[0]
+  const Icon = activeCategory.icon
+
+  return (
+    <section id="preparation" className="section-shell scroll-mt-24">
+      <SectionHeading
+        index="04"
+        overline="PREPARATION & TIPS"
+        title="行前準備與行李指南"
+        text="把出發前的提醒、駕車規則與特殊活動注意事項整理成可快速切換的閱讀區。"
+      />
+      <div className="prep-tabs" role="tablist" aria-label="行前準備分類">
+        {prepCategories.map((entry) => {
+          const EntryIcon = entry.icon
+          return (
+            <button
+              key={entry.id}
+              role="tab"
+              aria-selected={entry.id === active}
+              className={entry.id === active ? 'active' : ''}
+              onClick={() => setActive(entry.id)}
+            >
+              <EntryIcon size={16} />
+              <span>{entry.title}</span>
+            </button>
+          )
+        })}
+      </div>
+      <article className="prep-card">
+        <div className="prep-card-head">
+          <div>
+            <div className="eyebrow text-forest/45">CHECKLIST</div>
+            <h3>{activeCategory.title}</h3>
+          </div>
+          <span className="prep-icon"><Icon size={24} /></span>
+        </div>
+        <div className="prep-list">
+          {activeCategory.items.map((item) => (
+            <div className="prep-item" key={item}>
+              <span />
+              <p>{item}</p>
+            </div>
+          ))}
+        </div>
+      </article>
+    </section>
+  )
+}
+
 function SectionHeading({ index, overline, title, text }) {
   return (
     <div className="section-heading">
@@ -386,6 +483,7 @@ const navItems = [
   { id: 'home', label: '首頁', icon: Home },
   { id: 'itinerary', label: '行程', icon: CalendarDays },
   { id: 'explore', label: '探索', icon: Compass },
+  { id: 'preparation', label: '準備', icon: Luggage },
   { id: 'highlights', label: '亮點', icon: Sparkles },
 ]
 
@@ -438,6 +536,7 @@ function App() {
           <JourneyTracker />
           <Itinerary />
           <Explore />
+          <PreparationTips />
           <Highlights />
           <footer><span className="footer-mark">SN</span><p>南島慢旅 · Southern Notes</p><small>Made for the road, 2026.</small></footer>
         </div>
