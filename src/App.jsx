@@ -688,7 +688,6 @@ function PreparationTips() {
                   <div className="prep-activities-head">
                     <div className="eyebrow text-forest/45">ACTIVITIES GUIDE</div>
                     <h4>特殊活動詳細指南</h4>
-                    <p>每個活動採獨立子頁面閱讀，以下內容已完整保留並進一步擴充。</p>
                   </div>
                   <div className="prep-tabs prep-tabs-compact" role="tablist" aria-label="活動子分頁">
                     {activities.map((entry) => (
