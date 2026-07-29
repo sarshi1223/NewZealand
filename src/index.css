@@ -202,10 +202,10 @@ footer small { font-size: .65rem; }
 }
 
 @media (max-width: 767px) {
-  .custom-panel { grid-template-columns: 1fr; gap: .6rem; padding: .85rem .85rem .9rem; align-items: start; width: 100%; }
-  .custom-panel label { display: flex; flex-direction: column; min-width: 0; width: 100%; }
-  .custom-panel label span { margin-bottom: .25rem; font-size: .62rem; }
-  .custom-panel input { width: 100%; min-width: 0; max-width: 100%; box-sizing: border-box; padding: .55rem .6rem; font-size: .72rem; display: block; }
+  .custom-panel { display: flex; gap: .65rem; padding: .85rem .85rem .9rem; align-items: flex-start; width: 100%; }
+  .custom-panel label { display: flex; flex: 1 1 0; min-width: 0; flex-direction: column; }
+  .custom-panel label span { margin-bottom: .25rem; font-size: .62rem; white-space: nowrap; }
+  .custom-panel input { width: 100%; min-width: 0; max-width: 100%; box-sizing: border-box; padding: .52rem .55rem; font-size: .7rem; display: block; }
 }
 
 @media (min-width: 768px) {
