@@ -50,6 +50,7 @@ a { color: inherit; text-decoration: none; }
 .branch-prompt { display: grid; gap: 1rem; padding: 1rem 1.5rem 1.25rem; border-top: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.035); }
 .branch-choice-row { display: flex; flex-wrap: wrap; gap: .6rem; }
 .branch-choice { padding: .72rem .95rem; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; color: white; background: rgba(255,255,255,.06); font-size: .74rem; font-weight: 800; }
+.branch-choice.active { color: #123d36; background: #bcebd3; }
 .tracker-grid { display: grid; }
 .tracker-item { min-width: 0; padding: 1.5rem; border-top: 1px solid rgba(255,255,255,.1); }
 .tracker-item.primary { color: #17342f; background: #bce3e8; }
@@ -90,6 +91,13 @@ a { color: inherit; text-decoration: none; }
 .timeline-dot::after { content: ""; position: absolute; top: 12px; left: 3px; width: 1px; height: calc(100% + 67px); background: #dce6e1; }
 .timeline-row:last-child .timeline-dot::after { display: none; }
 .event-card { min-width: 0; padding: 0 0 1.5rem .2rem; }
+.event-card.branch-all { background: linear-gradient(180deg, rgba(255,255,255,.02), transparent); }
+.event-card.branch-ski,
+.event-card.branch-jetboat,
+.event-card.branch-food { padding-left: .8rem; border-left: 3px solid #78b8c7; }
+.event-card.branch-sightseeing,
+.event-card.branch-leisure,
+.event-card.branch-british { padding-left: .8rem; border-left: 3px solid #7fb69b; }
 .event-card h4 { margin: 0; font-size: .92rem; }
 .event-card > p { margin: .45rem 0 0; color: #6d827c; font-size: .76rem; line-height: 1.55; }
 .event-place { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin-top: .65rem; color: #81928d; font-size: .69rem; }
@@ -174,8 +182,6 @@ footer small { font-size: .65rem; }
   .day-copy small { max-width: 110px; margin-top: .15rem; overflow: hidden; font-size: .6rem; font-weight: 400; opacity: .65; text-overflow: ellipsis; white-space: nowrap; }
   .day-header, .timeline { padding: 2rem; }
   .branch-toggle-shell { margin: 0 2rem 1rem; }
-  .timeline.branch-day { grid-template-columns: 1fr 1fr; }
-  .timeline-branch-panel { padding: 1.2rem; }
   .timeline-row { grid-template-columns: 55px 10px 1fr; gap: .85rem; }
   .day-facts { grid-template-columns: 1fr 1fr; margin: 0 2rem; }
   .note-box { margin: 1rem 2rem 2rem; }
