@@ -157,7 +157,6 @@ function JourneyTracker() {
         <div className="custom-panel">
           <label><span>旅程日期</span><input type="date" min="2026-09-19" max="2026-09-29" value={customDate} onChange={(e) => setCustomDate(e.target.value)} /></label>
           <label><span>當地時間</span><input type="time" value={customTime} onChange={(e) => setCustomTime(e.target.value)} /></label>
-          <p><Sparkles size={15} /> 試著選擇 9/23 14:15，預覽快艇與蒸汽船的分組時刻。</p>
         </div>
       )}
 
