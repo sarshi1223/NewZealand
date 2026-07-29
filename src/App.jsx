@@ -674,8 +674,8 @@ function PreparationTips() {
               <span className="prep-icon"><SectionIcon size={24} /></span>
             </div>
             <div className="prep-copy">
-              <p className="prep-intro">{section.intro}</p>
-              {section.blocks.map((block, index) => (
+              {section.intro && <p className="prep-intro">{section.intro}</p>}
+              {section.blocks && section.blocks.map((block, index) => (
                 <details key={block.title} className="prep-block" open={index === 0}>
                   <summary>{block.title}</summary>
                   <div>
