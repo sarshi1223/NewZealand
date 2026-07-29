@@ -378,51 +378,214 @@ const prepCategories = [
     id: 'pack',
     title: '出發前 & 打包建議',
     icon: Luggage,
-    items: [
-      '九月底是初春，請採洋蔥式穿搭：薄上衣、保暖中層、防風外套分層準備，方便隨時增減。',
-      '南島紫外線依然很強，請帶高係數防曬乳、太陽眼鏡與帽子，尤其在雪地與水邊反光更明顯。',
-      '紐西蘭入境檢疫非常嚴格，登山鞋、運動鞋底的泥土務必刷洗乾淨，絕對不要攜帶肉類或生鮮食材。',
+    intro: '初春的南島，早晚像冬天、正午像秋天，山上又可能直接回到冬季。準備得越細，旅程越從容。',
+    sections: [
+      {
+        title: 'NZeTA 電子簽證與 IVL 申辦（極重要）',
+        body: [
+          '必須提前申請：台灣護照前往紐西蘭雖屬免簽證，但出發前必須線上申辦 NZeTA (New Zealand Electronic Travel Authority)，同時會一併強制徵收 IVL（國際遊客保育及旅遊稅）。',
+          '注意事項：建議透過紐西蘭官方 App 或官方網站申辦，審核通常需要幾個工作天，千萬不要拖到機場才臨時抱佛腳！取得後建議將 PDF 存於手機或印出紙本備用。',
+        ],
+      },
+      {
+        title: '應對一天四季：洋蔥式穿搭法',
+        body: [
+          '九月底的紐西蘭南島正值初春，日夜溫差極大，且山區與平地氣候迥異。請務必採用「洋蔥式穿搭」：',
+          '內層（吸濕排汗）：建議穿著輕薄的排汗衫或發熱衣（推薦美麗諾羊毛材質，保暖且防臭）。',
+          '中層（保暖蓄熱）：準備抓絨衣 (Fleece) 或輕薄的羽絨背心，方便在車內或室內隨時穿脫。',
+          '外層（防風防水）：一件高係數的防風防水外套 (如 Gore-Tex) 是南島旅行的靈魂，能完美抵禦湖畔與峽谷的強風。',
+        ],
+      },
+      {
+        title: '防曬警告：不可輕忽的紫外線',
+        body: [
+          '紐西蘭上空的臭氧層較薄，空氣極度純淨，這意味著紫外線（UV）直射非常強烈。即使氣溫只有 10 度，曝曬 15 分鐘也可能嚴重曬傷。',
+          '必備清單：SPF 50+ 高係數防曬乳、具備抗 UV 功能的太陽眼鏡（雪地與湖面反光極強，沒戴墨鏡會非常刺眼）、寬沿遮陽帽。',
+        ],
+      },
+      {
+        title: '海關檢疫：全球最嚴格的生物安全防線',
+        body: [
+          '紐西蘭對生態保護極度重視，海關檢疫非常嚴格，違規將面臨 $400 NZD 以上的立即罰款。',
+          '裝備清潔：所有戶外裝備（尤其是登山鞋、運動鞋底、帳篷）務必在台灣就「徹底刷洗乾淨」，不得殘留任何泥土或植物種子。',
+          '違禁品：絕對禁止攜帶任何肉類製品（包含泡麵內的肉塊）、生鮮蔬果、蜂蜜與乳製品。若有攜帶個人常備藥品，請保留原包裝與英文處方箋並誠實申報。',
+        ],
+      },
     ],
   },
   {
     id: 'drive',
     title: '自駕須知',
     icon: Car,
-    items: [
-      '紐西蘭靠左行駛，轉彎、變換車道與出車位前都要先提醒自己方向感。',
-      '圓環規則通常是禮讓右方來車，進入前先確認內圈車流再匯入。',
-      '遇到單線橋樑請留意讓行標誌與對向來車，先確認誰有優先通行權。',
-      '春季部分高山路段仍可能結冰或降雪，若行程會翻越山區，建議備妥雪鏈。',
+    intro: '在南島，自駕不是只是交通工具，而是每天景色本身的一部分。把規則先記熟，才能把注意力留給風景。',
+    sections: [
+      { title: '右駕與靠左行駛：顛覆直覺的挑戰', body: ['紐西蘭為右駕國家，車輛必須「靠左行駛」。', '口訣：「駕駛座永遠靠近道路中線」。在轉彎、從停車場駛出、或是在沒有標線的鄉間小路時，副駕駛請務必隨時出聲提醒「靠左、靠左」。雨刷與方向燈的位置通常與台灣相反，請保持耐心。'] },
+      { title: '圓環 (Roundabout) 的絕對規則', body: ['紐西蘭極少紅綠燈，多以圓環梳理交通。', '最高原則：「絕對禮讓右方來車」。在進入圓環前必須減速甚至停車，確認右側無車後才能駛入內圈。離開圓環前，請務必提早打「左轉燈」提醒後方車輛。'] },
+      { title: '單線橋樑 (One-lane bridge) 讓行邏輯', body: ['南島郊區有非常多只能容納一輛車通過的單線橋樑。', '看懂號誌：上橋前請注意讓行標誌。如果你的方向是「藍底白色大箭頭」，代表你有優先權；如果你的方向是「紅圈黑色小箭頭」，代表你必須停車，禮讓對向車輛全數通過後才能上橋。'] },
+      { title: '春季路況與雪鏈 (Snow Chains)', body: ['雖然已是春天，但在清晨穿越高山隘口（如 Crown Range Road）時，路面仍可能出現肉眼看不見的「黑冰 (Black Ice)」，極易打滑。請保持安全車距，避免急煞。若遇突發大雪，請遵照租車公司指示於規定路段安裝雪鏈。'] },
     ],
   },
   {
     id: 'local',
     title: '當地旅遊須知',
     icon: Compass,
-    items: [
-      '水龍頭冷水通常可直接飲用，出門可帶水瓶節省購買瓶裝水。',
-      '紐西蘭沒有普遍的小費文化，多數餐廳沒有強制加收服務費的習慣。',
-      '湖畔與草地要注意沙蠅 Sandflies，建議隨身準備防蚊液，特別是傍晚時段。',
+    intro: '這些都是會真正影響舒適度的小事。提早知道，旅行時就不會一直為瑣事分心。',
+    sections: [
+      { title: '飲水與餐飲文化', body: ['水質純淨，多數水龍頭的「冷水」可直接生飲（熱水不可）；紐西蘭無強制小費文化，無需額外計算服務費。'] },
+      { title: '防範南島特產：沙蠅 (Sandflies)', body: ['峽灣、西海岸或湖畔草地常有沙蠅，被咬會奇癢無比。防護重點：穿著淺色長袖長褲、減少皮膚裸露、遠離靜止水域，並務必塗抹含有 DEET 或強效配方的防蚊液。'] },
+      { title: '電源插座與電壓', body: ['電壓為 230/240V，插座為八字形三扁腳插頭（與澳洲相同），請攜帶萬國轉接頭。'] },
+        { title: '超市採購與環保', body: ["大型超市（Pak'nSave, Countdown/Woolworths, New World）極度普及。當地重視環保，結帳時幾乎不提供免費塑膠袋，請自備環保袋。買酒務必帶護照查驗年齡。"] },
+      { title: '自助加油文化', body: ['南島郊區多為自助。先停車、加油、記住加油機號碼 (Pump Number)，再到店內告知店員號碼並用信用卡（需預先開通預借現金 PIN 碼）結帳。'] },
+      { title: '網路與通訊', body: ['建議在機場購買 Spark / One NZ 實體卡或 eSIM。山區訊號較弱，建議提前下載離線 Google Maps。'] },
     ],
   },
   {
     id: 'activities',
     title: '特殊活動須知',
     icon: Sparkles,
+    activities: [
+      {
+        id: 'ski',
+        title: '卓越山脈春季滑雪 (9/21)',
+        body: [
+          '初春雪場特性與氣候：9 月底南島正值初春尾聲，山下可能春意盎然，但海拔近 2,000 公尺的 The Remarkables 雪場仍覆蓋厚雪。初春午後氣溫升高，雪質容易由硬雪轉為濕軟的「奶油雪 (Slush)」，滑行阻力增加，需特別注意重心調整。',
+          '裝備防護與穿搭：高海拔紫外線經純白雪地反射後威力驚人，專業雪鏡 (Goggles) 是絕對剛需（不可用一般太陽眼鏡替代，否則側邊漏光易導致雪盲）。手套必須具備 100% 防水機能；臉部與頸部請使用高係數防水防曬乳並搭配防風脖圍 (Buff)，防止紫外線灼傷與高山強風凍傷。',
+        ],
+      },
+      {
+        id: 'horse',
+        title: '魔戒河谷騎馬涉水 (9/22)',
+        body: [
+          '地形與人文背景：活動地點通常位於《魔戒》三部曲中壯麗的勒林頓 (Glenorchy) 箭河或 Dart River 河谷。這裡保留了純粹的毛利與拓荒者牧場風情，河谷地形開闊但風勢強勁。',
+          '安全紀律與服裝規範：褲裝：務必穿著具彈性的厚長褲（絕對禁止穿短褲或裙子），否則在大腿與馬鞍長時間摩擦下，不到半小時就會破皮流血。',
+          '安全紀律與服裝規範：鞋履：必須穿著完全包覆腳趾的包鞋或靴子，鞋跟需有一定防滑性，防止雙腳在行進間滑出馬鐙。',
+          '安全紀律與服裝規範：禁忌：上半身衣物必須合身，嚴禁穿著寬鬆、下擺會隨風狂飄的雨衣或風衣，這極容易在空中發出聲響並驚嚇到敏感的馬匹。涉水時河水冰冷，鞋褲有微濕的心理準備。',
+        ],
+      },
+      {
+        id: 'jetboat',
+        title: '峽谷噴射快艇 (9/23)',
+        body: [
+          '物理特性與刺激感：Shotover River 狹窄深邃，快艇駕駛會以高達 85 公里時速在僅有幾公尺寬的岩壁間進行 360 度急轉彎與甩尾（Spin）。',
+          '極端防風與防寒對策：快艇高速行駛產生的強風，會讓初春的 10 度氣溫瞬間降至體感零下。活動方會提供救生衣與防水罩衫，但你自身內部必須穿著防風防水外套。強烈建議配戴能緊緊包覆頭部、絕不會被時速 85 公里強風吹走的緊身保暖毛帽，並準備一副運動墨鏡，防止冷風與水花強力拍打眼睛導致視線模糊。',
+        ],
+      },
+      {
+        id: 'cook',
+        title: '庫克山 Hooker Valley Track 健行 (9/25)',
+        body: [
+          '高山微氣候與步道特徵：胡克山谷步道全長來回約 10 公里，沿途會經過三座高空懸吊索橋、冰河湖與壯麗雪山。庫克山區屬於典型的高山海洋性氣候，氣象預報常常失準，上一秒豔陽高照、下一秒山谷瞬間吹起狂風暴雨是家常便飯。',
+          '裝備與能量補給：外層防護：洋蔥式穿搭的最外層必須是具備防風與防水機能的硬殼衣 (Hard Shell / Gore-Tex)。',
+          '裝備與能量補給：鞋款：建議穿著抓地力強、具備防水功能的輕裝登山鞋或戶外健行鞋，步道雖鋪設完善但部分路段仍有碎石與泥濘。',
+          '裝備與能量補給：補給：背包內必須攜帶至少 1-2 公升的飲水以及高熱量行動糧（如巧克力、能量棒、堅果），在高海拔與強風環境下消耗的熱量極大，隨時補充能有效預防低溫症。',
+        ],
+      },
+      {
+        id: 'twizel',
+        title: '特威澤爾觀星與追極光',
+        body: [
+          '南極光科學認知：南極光 (Aurora Australis) 在中低緯度多呈現微弱的綠光、垂直光柱或地平線暈光，肉眼色彩通常不如北極圈鮮明。相機或手機長時間曝光能捕捉到相片中的震撼紅綠光，請建立正確期待。',
+          '暗空保護區禮儀與紅光規定：Twizel 位於 Aoraki Mackenzie 國際黑暗天空保護區。在現場賞星時，全場絕對嚴禁使用手機白光或強烈手電筒亂照，這會瞬間破壞眾人辛苦累積的夜視力。所有尋路與操作器材的燈光，一律必須切換為「紅光模式」或用紅色玻璃紙包覆。',
+          '極端低溫生存法則：深夜經常逼近 0 度甚至零下，守候極光需要長時間靜止站立。請穿上最厚重的羽絨衣、發熱衣、毛帽、雙層防風手套與高筒保暖鞋。',
+          '攝影實戰設定：必須攜帶穩固的相機或手機腳架；手機開啟夜間長曝光模式（3-30秒）；相機使用大光圈手動對焦無限遠，白平衡設在 3500K 呈現乾淨夜空。',
+        ],
+      },
+      {
+        id: 'skyline',
+        title: '皇后鎮天際纜車與 Luge 溜溜車 (Day 3)',
+        body: [
+          '纜車體驗： Skyline Gondola 是南半球最陡的纜車之一，隨著爬升，瓦卡蒂普湖與卓越山脈的壯闊全景盡收眼底。山頂風大較平地寒冷，建議備妥防風外套。',
+          'Luge 溜溜車安全守則：這是一種無動力、靠地心引力下滑的刺激滑車。操控方式極為直覺（拉桿往後是煞車、往前是放鬆）。初次遊玩者強制規定必須選擇新手賽道 (Beginner Track)，過彎時務必遵守現場號誌與減速指示，且全程必須確實扣好安全帽帶。',
+        ],
+      },
+      {
+        id: 'onsen',
+        title: 'Onsen Hot Pools 半露天溫泉 (Day 4)',
+        body: [
+          '沉浸式隱密景觀：皇后鎮頂級的半露天木造私人溫泉池，正對著壯麗的蕭托over河谷與懸崖峭壁，是融合自然與隱私的極致享受。',
+          '注意事項：必須自備泳衣（男女皆須著裝）；店家會提供毛巾與礦泉水。由於高山泉水與初春氣候較為乾燥，泡湯結束後皮膚容易感到乾澀，建議隨身攜帶保濕乳液或身體乳滋潤。',
+        ],
+      },
+      {
+        id: 'steam',
+        title: 'TSS 恩斯洛百年蒸汽船 (Day 5 - 休閒組)',
+        body: [
+          '百年工藝與湖上巡遊：建於 1912 年的 TSS Earnslaw 是南半球唯一仍在營運的燃煤百年蒸汽船，享有「湖中女王」的美譽。船艙內保留了復古的木造結構與巨大的運轉活塞機械，乘客甚至可以走到鍋爐房觀看工人鏟煤。',
+          '氣溫與風向：航行於瓦卡蒂普湖單程約 45 分鐘。坐在室內船艙溫暖舒適，但若走到戶外甲板欣賞湖景，湖面風勢非常強勁寒冷，務必穿著防風外套與戴上毛帽。',
+        ],
+      },
+    ],
+  },
+]
+
+const packingChecklist = [
+  {
+    title: '證件與金錢類',
     items: [
-      '滑雪（9/21）：必備防水手套、雪鏡、脖圍，臉部也要做好防曬。',
-      '騎馬（9/22）：務必穿長褲與包鞋，避免穿著會隨風飄揚的寬鬆衣物。',
-      '峽谷噴射快艇（9/23）：峽谷風勢強又冷，請帶防風外套與能緊戴的毛帽，建議配戴墨鏡擋風。',
-      '庫克山健行（9/25）：Hooker Valley Track 雖平緩，仍請採洋蔥式穿搭，帶足飲水、行動糧，並穿舒適運動鞋或輕裝登山鞋。',
-      '觀星與追極光（Twizel）：夜晚接近零度，請穿最保暖的羽絨衣、毛帽與手套；可下載 Aurora App 監測 KP 值，拍照建議帶腳架並使用紅光手電筒。',
+      'NZeTA 電子簽證與 IVL 證明（強烈建議提前線上申辦並列印/儲存）',
+      '護照正本（效期需在回國後 6 個月以上）',
+      '國際駕照與台灣駕照正本',
+      '信用卡（至少 2 張，需開通預借現金 PIN 碼供自助加油使用）',
+      '紐西蘭幣現金（少量備用）',
+      '機票與住宿預訂確認單',
+    ],
+  },
+  {
+    title: '電子與攝影類',
+    items: [
+      '澳紐規八字型三孔轉接頭 / 萬國轉接頭',
+      '行動電源（限隨身行李）',
+      '相機 / 手機腳架（星空攝影必備）',
+      '充電線與多孔充電頭',
+    ],
+  },
+  {
+    title: '衣物與穿搭類（9月底初春）',
+    items: [
+      '吸濕排汗內層 / 發熱衣（約 3-4 套）',
+      '保暖中層（抓絨衣、羽絨背心）',
+      '防風防水外套 (Gore-Tex)',
+      '彈性長褲（騎馬與健行用，禁止短褲）',
+      '舒適好走的運動鞋或輕裝登山鞋',
+      '禦寒配件：毛帽、厚手套、脖圍/圍巾',
+    ],
+  },
+  {
+    title: '藥品與個人防護類',
+    items: [
+      '個人常備藥品（保留原包裝）',
+      '高係數防曬乳 (SPF 50+)',
+      '抗 UV 太陽眼鏡',
+      '強效防蚊液（含 DEET/Picaridin，對抗沙蠅）',
+      '保濕乳液 / 護唇膏',
+    ],
+  },
+  {
+    title: '強烈建議補充的隨身好物',
+    items: [
+      '紅光手電筒（觀星與暗空保護區必備，保護夜視力）',
+      '保溫瓶（隨時補充熱水，應對 10 度以下低溫）',
+      '暖暖包（長時間戶外滑雪與觀星時極度好用）',
+      '隨身小背包（健行與快艇時攜帶隨身物品）',
+      '專業雪鏡與防水滑雪手套（滑雪日專用）',
     ],
   },
 ]
 
 function PreparationTips() {
   const [active, setActive] = useState('pack')
+  const [activeActivity, setActiveActivity] = useState('ski')
+  const [checked, setChecked] = useState({})
   const activeCategory = prepCategories.find((entry) => entry.id === active) || prepCategories[0]
-  const Icon = activeCategory.icon
+  const activitiesCategory = prepCategories.find((entry) => entry.id === 'activities')
+  const activeChecklist = packingChecklist
+  const activeActivityEntry = activitiesCategory?.activities?.find((entry) => entry.id === activeActivity) || activitiesCategory?.activities?.[0] || null
+  const CategoryIcon = activeCategory.icon
+
+  const toggleItem = (groupIndex, itemIndex) => {
+    const key = `${groupIndex}-${itemIndex}`
+    setChecked((prev) => ({ ...prev, [key]: !prev[key] }))
+  }
 
   return (
     <section id="preparation" className="section-shell scroll-mt-24">
@@ -430,42 +593,120 @@ function PreparationTips() {
         index="04"
         overline="PREPARATION & TIPS"
         title="行前準備與行李指南"
-        text="把出發前的提醒、駕車規則與特殊活動注意事項整理成可快速切換的閱讀區。"
+        text="以頂級旅行社旅遊手冊的方式，分章節呈現出發前提醒、當地須知、活動專頁與行李清單。"
       />
-      <div className="prep-tabs" role="tablist" aria-label="行前準備分類">
-        {prepCategories.map((entry) => {
-          const EntryIcon = entry.icon
-          return (
-            <button
-              key={entry.id}
-              role="tab"
-              aria-selected={entry.id === active}
-              className={entry.id === active ? 'active' : ''}
-              onClick={() => setActive(entry.id)}
-            >
-              <EntryIcon size={16} />
-              <span>{entry.title}</span>
-            </button>
-          )
-        })}
-      </div>
-      <article className="prep-card">
-        <div className="prep-card-head">
-          <div>
-            <div className="eyebrow text-forest/45">CHECKLIST</div>
-            <h3>{activeCategory.title}</h3>
+      <div className="prep-shell">
+        <div className="prep-side">
+          <div className="prep-tabs" role="tablist" aria-label="行前準備分類">
+            {prepCategories.map((entry) => {
+              const EntryIcon = entry.icon
+              return (
+                <button
+                  key={entry.id}
+                  role="tab"
+                  aria-selected={entry.id === active}
+                  className={entry.id === active ? 'active' : ''}
+                  onClick={() => setActive(entry.id)}
+                >
+                  <EntryIcon size={16} />
+                  <span>{entry.title}</span>
+                </button>
+              )
+            })}
           </div>
-          <span className="prep-icon"><Icon size={24} /></span>
-        </div>
-        <div className="prep-list">
-          {activeCategory.items.map((item) => (
-            <div className="prep-item" key={item}>
-              <span />
-              <p>{item}</p>
+          <article className="prep-card prep-article">
+            <div className="prep-card-head">
+              <div>
+                <div className="eyebrow text-forest/45">CHECKLIST · GUIDE</div>
+                <h3>{activeCategory.title}</h3>
+              </div>
+              <span className="prep-icon"><CategoryIcon size={24} /></span>
             </div>
-          ))}
+            <div className="prep-prose">
+              <p className="prep-lead">{activeCategory.intro}</p>
+              <div className="prep-sections">
+                {(activeCategory.sections || []).map((section, sectionIndex) => (
+                  <details key={section.title} open={sectionIndex === 0}>
+                    <summary>{section.title}</summary>
+                    <div>
+                      {section.body.map((line) => <p key={line}>{line}</p>)}
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </article>
         </div>
-      </article>
+
+        <article className="prep-card prep-activity-card">
+          <div className="prep-card-head">
+            <div>
+              <div className="eyebrow text-forest/45">ACTIVITIES GUIDE</div>
+              <h3>特殊活動詳細指南</h3>
+            </div>
+            <span className="prep-icon"><ActivityIcon size={24} /></span>
+          </div>
+          <div className="prep-tabs prep-tabs-compact" role="tablist" aria-label="活動子分頁">
+            {(activitiesCategory?.activities || []).map((entry) => (
+              <button
+                key={entry.id}
+                role="tab"
+                aria-selected={entry.id === activeActivity}
+                className={entry.id === activeActivity ? 'active' : ''}
+                onClick={() => setActiveActivity(entry.id)}
+              >
+                <span>{entry.title}</span>
+              </button>
+            ))}
+          </div>
+          <div className="prep-activity-body">
+            {activeActivityEntry ? (
+              <>
+                <div className="prep-article-head">
+                  <h4>{activeActivityEntry?.title}</h4>
+                  <p>每個活動都是獨立子頁面檢視，以下內容已完整保留並擴充成閱讀章節。</p>
+                </div>
+                <div className="prep-prose">
+                  {(activeActivityEntry?.body || []).map((line) => <p key={line}>{line}</p>)}
+                  <div className="prep-note">
+                    <strong>補充提醒</strong>
+                    <p>
+                      以上活動皆建議依當日天氣與團隊體感微調。若遇強風、降雨、山區結冰或能見度驟降，請以現場安全規範與活動單位指示為先。
+                    </p>
+                  </div>
+                </div>
+              </>
+            ) : null}
+          </div>
+        </article>
+
+        <article className="prep-card checklist-card">
+          <div className="prep-card-head">
+            <div>
+              <div className="eyebrow text-forest/45">PACKING CHECKLIST</div>
+              <h3>互動式行李打包勾選清單</h3>
+            </div>
+            <span className="prep-icon"><Luggage size={24} /></span>
+          </div>
+          <div className="checklist-grid">
+            {activeChecklist.map((group, groupIndex) => (
+              <section key={group.title} className="checklist-group">
+                <h4>{group.title}</h4>
+                {group.items.map((item, itemIndex) => {
+                  const key = `${groupIndex}-${itemIndex}`
+                  const isChecked = Boolean(checked[key])
+                  return (
+                    <label key={item} className={`check-item ${isChecked ? 'checked' : ''}`}>
+                      <input type="checkbox" checked={isChecked} onChange={() => toggleItem(groupIndex, itemIndex)} />
+                      <span>{item}</span>
+                    </label>
+                  )
+                })}
+              </section>
+            ))}
+          </div>
+        </article>
+      </div>
     </section>
   )
 }
